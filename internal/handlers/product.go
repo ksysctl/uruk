@@ -12,7 +12,7 @@ import (
 	"github.com/ksysctl/uruk/internal/models"
 )
 
-// GetProducts returns all products
+// GetProducts shows all products
 func GetProducts(c *gin.Context) {
 	var products []models.Product
 
@@ -35,7 +35,7 @@ func GetProducts(c *gin.Context) {
 	}
 }
 
-// GetProduct shows single product
+// GetProduct shows single product by ID
 func GetProduct(c *gin.Context) {
 	var product []models.Product
 

@@ -2,8 +2,6 @@ package actions
 
 import (
 	"github.com/gin-gonic/gin"
-
-	"github.com/ksysctl/uruk/internal/handlers"
 )
 
 // Engine is the framework's instance
@@ -18,11 +16,7 @@ func (r Engine) Init() *gin.Engine {
 	r.render()
 	r.logger()
 	r.storage()
-
-	r.router.GET("/products", handlers.GetProducts)
-	r.router.GET("/products/:id", handlers.GetProduct)
-
-	r.router.GET("/", handlers.GetHome)
+	r.route()
 
 	return r.router
 }

@@ -1,0 +1,15 @@
+{{ define "base" }}
+    <h3>{{ .title }}</h3>
+    <div class="content">
+        <ul>
+            <li>
+                <p>Name: {{ .product.Name }}</p>
+                <p>Code: {{ .product.Code }}</p>
+                <p>Price: {{ .product.Price }}</p>
+                <p>Created at: {{ .product.CreatedAt | formatAsDate }}</p>
+                <p>Updated at: {{ .product.UpdatedAt | formatAsDate }}</p>
+                <a href="/cart/add/{{ .product.ID }}">Add to cart</a>
+            </li>
+        </ul>
+    </div>
+{{ end }}

@@ -1,0 +1,17 @@
+{{ define "base" }}
+    <h3>{{ .title }}</h3>
+    <div class="content">
+        <ul>
+        {{ range .products }}
+            <li>
+                <p>Name: {{ .Name }}</p>
+                <p>Code: {{ .Code }}</p>
+                <p>Price: {{ .Price }}</p>
+                <p>Created at: {{ .CreatedAt | formatAsDate }}</p>
+                <p>Updated at: {{ .UpdatedAt | formatAsDate }}</p>
+                <a href="/products/{{ .ID }}">show</a>
+            </li>
+        {{end}}
+        </ul>
+    </div>
+{{ end }}

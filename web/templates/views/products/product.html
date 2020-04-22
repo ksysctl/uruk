@@ -1,6 +1,7 @@
-{{ define "base" }}
+{{ define "content" }}
     <h3>{{ .title }}</h3>
     <div class="content">
+        {{ if gt .product.ID 0 }}
         <ul>
             <li>
                 <p>Name: {{ .product.Name }}</p>
@@ -11,5 +12,8 @@
                 <a href="/cart/add/{{ .product.ID }}">Add to cart</a>
             </li>
         </ul>
+        {{ else }}
+            <p>{{ .status }}: {{ .error }}</p>
+        {{ end }}
     </div>
 {{ end }}

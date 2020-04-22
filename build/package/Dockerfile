@@ -1,5 +1,6 @@
 FROM golang:alpine AS builder
-MAINTAINER Moises Brenes <moises.brenes@gmail.com>
+LABEL maintainer="moises.brenes@gmail.com"
+LABEL description="Go Project"
 
 # Set necessary environmet variables needed for our image
 ENV GO111MODULE=on \

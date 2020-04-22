@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"fmt"
-	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -15,53 +14,53 @@ import (
 // GetProducts shows all products
 func GetProducts(c *gin.Context) {
 	var products []models.Product
+	var view = "products/products"
+	var res = response.NewHandle(gin.H{
+		"title":   "Catalog View",
+		"product": products,
+	})
 
-	contentType := response.SetType(
-		c.DefaultQuery("type", response.TypeHTML),
-	)
-
+	// Get entities from database
 	db := c.MustGet("db").(*gorm.DB)
 	db.Find(&products)
 
-	if contentType == response.TypeHTML {
-		c.HTML(http.StatusOK, "products/products", gin.H{
-			"title":    "Catalog Products",
-			"products": products,
-		})
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"data": products,
-		})
-	}
+	res.SetPayload("products", products)
+	res.GetOkResponse(c, view)
 }
 
 // GetProduct shows single product by ID
 func GetProduct(c *gin.Context) {
-	var product []models.Product
+	var product models.Product
+	var view = "products/product"
+	var res = response.NewHandle(gin.H{
+		"title":   "Product View",
+		"product": product,
+	})
 
-	contentType := response.SetType(
-		c.DefaultQuery("type", response.TypeHTML),
-	)
-
+	// Obtain parameters
 	id := c.Param("id")
+
+	// Parse parameter
 	productID, err := strconv.ParseUint(id, 10, 32)
 	if err != nil {
-		fmt.Println(fmt.Sprintf("Error parsing string Uint %s", id))
+		res.SetPayload("error", fmt.Sprintf("Error parsing %s type(%T) as Uint", id, id))
+		res.GetBadResponse(c, view)
+		return
 	}
 
+	// Get entity from database
 	db := c.MustGet("db").(*gorm.DB)
 	db.Where(
 		&models.Product{ID: uint(productID)},
 	).First(&product)
 
-	if contentType == response.TypeHTML {
-		c.HTML(http.StatusOK, "products/products", gin.H{
-			"title":    "Product View",
-			"products": product,
-		})
-	} else {
-		c.JSON(http.StatusOK, gin.H{
-			"data": product,
-		})
+	// Check if entity exists
+	if product.ID == 0 {
+		res.SetPayload("error", fmt.Sprintf("Product ID does not exist %s", id))
+		res.GetNotFoundResponse(c, view)
+		return
 	}
+
+	res.SetPayload("product", product)
+	res.GetOkResponse(c, view)
 }

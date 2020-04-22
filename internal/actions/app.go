@@ -11,7 +11,8 @@ type Engine struct {
 
 // Init initializes engine
 func (r Engine) Init() *gin.Engine {
-	r.router = gin.Default()
+	r.router = gin.New()
+	r.router.Use(gin.Recovery())
 
 	r.render()
 	r.logger()

@@ -1,16 +1,17 @@
-package response
+package helpers
 
 import (
 	"fmt"
 	"reflect"
 )
 
-func render(o interface{}, name string, params ...interface{}) (out []reflect.Value, err error) {
+// CallByName calls object func by its name
+func CallByName(o interface{}, name string, params ...interface{}) (out []reflect.Value, err error) {
 	v := reflect.ValueOf(o)
 	m := v.MethodByName(name)
 
 	if !m.IsValid() {
-		return make([]reflect.Value, 0), &ErrorResponse{
+		return make([]reflect.Value, 0), &ErrorHelper{
 			msg: fmt.Sprintf("Method not found %s", name),
 		}
 	}

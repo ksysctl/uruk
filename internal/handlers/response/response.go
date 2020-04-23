@@ -6,6 +6,8 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+
+	"github.com/ksysctl/uruk/internal/helpers"
 )
 
 // Handle is the interface to handle responses at view level
@@ -56,7 +58,7 @@ func (r *res) GetResponse(context *gin.Context, view string) {
 	if content == TypeHTML {
 		context.HTML(http.StatusOK, view, r.payload)
 	} else {
-		_, err = render(context, strings.ToUpper(content), http.StatusOK, r.payload)
+		_, err = helpers.CallByName(context, strings.ToUpper(content), http.StatusOK, r.payload)
 	}
 
 	if err != nil {

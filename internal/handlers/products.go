@@ -5,10 +5,10 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 
 	"github.com/ksysctl/uruk/internal/handlers/response"
 	"github.com/ksysctl/uruk/internal/models"
+	"github.com/ksysctl/uruk/internal/repository"
 )
 
 // GetProducts shows all products
@@ -20,9 +20,9 @@ func GetProducts(c *gin.Context) {
 		"product": products,
 	})
 
-	// Get entities from database
-	db := c.MustGet("db").(*gorm.DB)
-	db.Find(&products)
+	// Access to product repository from context
+	repo := c.MustGet("repos").(repository.Repository)
+	products = repo.Product.Get()
 
 	res.SetPayload("products", products)
 	res.GetOkResponse(c, view)
@@ -48,11 +48,9 @@ func GetProduct(c *gin.Context) {
 		return
 	}
 
-	// Get entity from database
-	db := c.MustGet("db").(*gorm.DB)
-	db.Where(
-		&models.Product{ID: uint(productID)},
-	).First(&product)
+	// Access to product repository from context
+	repo := c.MustGet("repos").(repository.Repository)
+	product = repo.Product.GetByID(uint(productID))
 
 	// Check if entity exists
 	if product.ID == 0 {

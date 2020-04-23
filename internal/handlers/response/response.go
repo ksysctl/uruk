@@ -3,6 +3,7 @@ package response
 import (
 	"fmt"
 	"net/http"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -37,6 +38,8 @@ func NewHandle(payload map[string]interface{}) Handle {
 
 // GetResponse is the base response at view level
 func (r *res) GetResponse(context *gin.Context, view string) {
+	var err error
+
 	if _, ok := r.payload["status"]; !ok {
 		r.SetPayload("status", http.StatusOK)
 	}
@@ -45,7 +48,7 @@ func (r *res) GetResponse(context *gin.Context, view string) {
 		fmt.Println(r.payload["error"])
 	}
 
-	// supports rendering json/html
+	// render response
 	content := SetType(
 		context.DefaultQuery("type", TypeHTML),
 	)
@@ -53,7 +56,11 @@ func (r *res) GetResponse(context *gin.Context, view string) {
 	if content == TypeHTML {
 		context.HTML(http.StatusOK, view, r.payload)
 	} else {
-		context.JSON(http.StatusOK, r.payload)
+		_, err = render(context, strings.ToUpper(content), http.StatusOK, r.payload)
+	}
+
+	if err != nil {
+		panic(err)
 	}
 }
 

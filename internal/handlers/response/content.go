@@ -4,6 +4,8 @@ package response
 const (
 	typeJSON = iota
 	typeHTML
+	typeXML
+	typeYAML
 )
 
 const (
@@ -11,11 +13,17 @@ const (
 	TypeJSON = "json"
 	// TypeHTML represents HTML Content-Type
 	TypeHTML = "html"
+	// TypeXML represents XML Content-Type
+	TypeXML = "xml"
+	// TypeYAML represents YAML Content-Type
+	TypeYAML = "yaml"
 )
 
 var types = map[string]int{
 	TypeJSON: typeJSON,
 	TypeHTML: typeHTML,
+	TypeXML:  typeXML,
+	TypeYAML: typeYAML,
 }
 
 // SetType maps supported Content-Type
